@@ -19,9 +19,14 @@ import React from "react";
 
 // reactstrap components
 import { Button, Container, Row, Col } from "reactstrap";
+import { Session } from 'bc-react-session';
 
 class UserHeader extends React.Component {
+
   render() {
+
+    const { payload } = Session.get();
+
     return (
       <>
         <div
@@ -29,7 +34,7 @@ class UserHeader extends React.Component {
           style={{
             minHeight: "600px",
             backgroundImage:
-              "url(" + require("assets/img/theme/profile-cover.jpg") + ")",
+              "url(" + require("assets/img/theme/23514.jpg") + ")",
             backgroundSize: "cover",
             backgroundPosition: "center top"
           }}
@@ -40,17 +45,17 @@ class UserHeader extends React.Component {
           <Container className="d-flex align-items-center" fluid>
             <Row>
               <Col lg="7" md="10">
-                <h1 className="display-2 text-white">Hello Jesse</h1>
+                <h1 className="display-2 text-white">Hello {payload.name}</h1>
                 <p className="text-white mt-0 mb-5">
                   This is your profile page. You can see the progress you've
                   made with your work and manage your projects or assigned tasks
                 </p>
                 <Button
                   color="info"
-                  href="#pablo"
-                  onClick={e => e.preventDefault()}
+                  href="#"
+                  onClick={this.props.handler}
                 >
-                  Edit profile
+                  {this.props.textButton}
                 </Button>
               </Col>
             </Row>

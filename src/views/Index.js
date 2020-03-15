@@ -22,6 +22,12 @@ import classnames from "classnames";
 import Chart from "chart.js";
 // react plugin used to create charts
 import { Line, Bar } from "react-chartjs-2";
+import API from './../utils/API'
+import LocalStorageService from './../services/LocalStorageService'
+import {Session} from 'bc-react-session';
+// import LocalStorageService from './../services/LocalStorageService'
+// import API from './../utils/API'
+
 // reactstrap components
 import {
   Button,
@@ -48,17 +54,46 @@ import {
 
 import Header from "components/Headers/Header.js";
 
+
 class Index extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       activeNav: 1,
-      chartExample1Data: "data1"
+      chartExample1Data: "data1",
+      authenticated: false,
+      loading: true
     };
     if (window.Chart) {
       parseOptions(Chart, chartOptions());
     }
   }
+
+  async componentDidMount() {
+
+
+    if(Session.get().isValid){
+      Session.onExpiration((session) => session.destroy());
+    }
+
+    try {
+      let response = await API.post('verify/', {
+        token: LocalStorageService.getAccessToken()
+      });
+
+      if (response.status === 200) {
+        Session.setPayload(response.data.company);
+        this.setState({})
+      }
+      console.log(response);
+
+    } catch (error) {
+      console.log(error);
+      LocalStorageService.clearToken();
+      Session.destroy();
+    }
+  }
+
   toggleNavs = (e, index) => {
     e.preventDefault();
     this.setState({
@@ -68,6 +103,7 @@ class Index extends React.Component {
     });
   };
   render() {
+
     return (
       <>
         <Header />
@@ -342,6 +378,12 @@ class Index extends React.Component {
         </Container>
       </>
     );
+
+    // if (this.state.authenticated === true) {
+      
+    // } else {
+    //   return <Redirect to="/auth/login" />
+    // }
   }
 }
 

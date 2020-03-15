@@ -16,6 +16,10 @@
 
 */
 import React from "react";
+import { Session } from 'bc-react-session';
+import API from './../../utils/API';
+import LocalStorageService from "./../../services/LocalStorageService";
+
 
 // reactstrap components
 import {
@@ -34,10 +38,159 @@ import {
 import UserHeader from "components/Headers/UserHeader.js";
 
 class Profile extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    const { payload } = Session.get();
+
+    this.state = {
+      editing: false,
+      changePassword: false,
+      email: payload.email,
+      name: payload.name,
+      password: "ProntoBPO",
+      editButton: "Edit profile",
+      classPwd1: "form-control-alternative",
+      classPwd2: "form-control-alternative",
+      classField1: "",
+      classField2: "",
+    }
+  }
+
+  async componentDidMount() {
+
+    if(Session.get().isValid){
+      Session.onExpiration((session) => session.destroy());
+    }
+
+    try {
+      let response = await API.post('verify/', {
+        token: LocalStorageService.getAccessToken()
+      });
+
+      if (response.status === 200) {
+        Session.setPayload(response.data.company);
+        this.setState({})
+      }
+      console.log(response);
+
+    } catch (error) {
+      console.log(error);
+      LocalStorageService.clearToken();
+      Session.destroy();
+    }
+  }
+
+  editProfile(event) {
+    event.preventDefault();
+    this.setState({
+      editing: !this.state.editing,
+      editButton: !this.state.editing ? "Cancel" : "Edit profile"
+    });
+  }
+
+  onChangeEmail(value) {
+    this.setState({ email: value });
+  }
+
+  onChangeName(value) {
+    this.setState({ name: value });
+  }
+
+  onChangePassword(value) {
+
+    let newClass = "is-valid";
+    let fieldClass = "has-success";
+    if (value.length < 8) {
+      newClass = "is-invalid";
+      fieldClass = "has-danger";
+    }
+
+    this.setState({ password: value, classPwd1: this.state.classPwd1 + " " + newClass, classField1: fieldClass });
+  }
+
+  verifyPassword(value) {
+
+
+    let newClass = "is-valid";
+    let fieldClass = "has-success";
+
+    if (value !== this.state.password) {
+      newClass = "is-invalid";
+      fieldClass = "has-danger";
+    }
+
+    this.setState({ classPwd2: this.state.classPwd2 + " " + newClass, classField2: fieldClass });
+
+  }
+
+  changePassword = (event) => {
+    event.preventDefault();
+    let change = !this.state.changePassword;
+    let password = "";
+    let classPwd1 = this.state.classPwd1;
+    let classPwd2 = this.state.classPwd2;
+
+    if (this.state.changePassword) {
+      password = "ProntoBPO";
+      classPwd1 = "form-control-alternative";
+      classPwd2 = "form-control-alternative";
+    }
+
+    this.setState({
+      password: password,
+      changePassword: change,
+      classField1: "",
+      classField2: "",
+      classPwd1: classPwd1,
+      classPwd2: classPwd2
+    });
+
+  }
+
+  saveChanges = async (event) => {
+    event.preventDefault();
+
+    if (this.state.name && this.state.email && this.state.password) {
+      const { payload } = Session.get();
+
+      try {
+        let data = {
+          name: this.state.name,
+          email: this.state.email
+        }
+
+        if (this.state.changePassword && this.state.password) {
+          data.password = this.state.password;
+        }
+
+        const response = await API.patch('companies/' + payload.id + "/", data);
+
+        if(response.status === 200){
+          Session.setPayload(response.data.company);
+          this.setState({});
+        }
+
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+        Session.destroy();
+      }
+
+      this.setState({ editing: false });
+    }else{
+      console.log("EMPTY FIELDS");
+    }
+  }
+
   render() {
+
+    const { payload } = Session.get();
+
     return (
       <>
-        <UserHeader />
+        <UserHeader handler={this.editProfile.bind(this)} textButton={this.state.editButton} />
         {/* Page content */}
         <Container className="mt--7" fluid>
           <Row>
@@ -46,83 +199,42 @@ class Profile extends React.Component {
                 <Row className="justify-content-center">
                   <Col className="order-lg-2" lg="3">
                     <div className="card-profile-image">
-                      <a href="#pablo" onClick={e => e.preventDefault()}>
+                      <a href="#image" onClick={e => e.preventDefault()}>
                         <img
                           alt="..."
                           className="rounded-circle"
-                          src={require("assets/img/theme/team-4-800x800.jpg")}
+                          src={require("assets/img/theme/392.jpg")}
                         />
                       </a>
                     </div>
                   </Col>
                 </Row>
                 <CardHeader className="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
-                  <div className="d-flex justify-content-between">
-                    <Button
-                      className="mr-4"
-                      color="info"
-                      href="#pablo"
-                      onClick={e => e.preventDefault()}
-                      size="sm"
-                    >
-                      Connect
-                    </Button>
-                    <Button
-                      className="float-right"
-                      color="default"
-                      href="#pablo"
-                      onClick={e => e.preventDefault()}
-                      size="sm"
-                    >
-                      Message
-                    </Button>
-                  </div>
+
                 </CardHeader>
                 <CardBody className="pt-0 pt-md-4">
                   <Row>
                     <div className="col">
                       <div className="card-profile-stats d-flex justify-content-center mt-md-5">
                         <div>
-                          <span className="heading">22</span>
-                          <span className="description">Friends</span>
+                          <span className="heading">{payload.limit_exceeded ? payload.plan.no_of_views : payload.no_views}</span>
+                          <span className="description">Views</span>
                         </div>
                         <div>
-                          <span className="heading">10</span>
-                          <span className="description">Photos</span>
+                          <span className="heading">{payload.plan.name}</span>
+                          <span className="description">Plan</span>
                         </div>
                         <div>
-                          <span className="heading">89</span>
-                          <span className="description">Comments</span>
+                          <span className="heading">{payload.plan.no_of_views}</span>
+                          <span className="description">Limit</span>
                         </div>
                       </div>
                     </div>
                   </Row>
                   <div className="text-center">
                     <h3>
-                      Jessica Jones
-                      <span className="font-weight-light">, 27</span>
+                      {payload.name}
                     </h3>
-                    <div className="h5 font-weight-300">
-                      <i className="ni location_pin mr-2" />
-                      Bucharest, Romania
-                    </div>
-                    <div className="h5 mt-4">
-                      <i className="ni business_briefcase-24 mr-2" />
-                      Solution Manager - Creative Tim Officer
-                    </div>
-                    <div>
-                      <i className="ni education_hat mr-2" />
-                      University of Computer Science
-                    </div>
-                    <hr className="my-4" />
-                    <p>
-                      Ryan — the name taken by Melbourne-raised, Brooklyn-based
-                      Nick Murphy — writes, performs and records all of his own
-                      music.
-                    </p>
-                    <a href="#pablo" onClick={e => e.preventDefault()}>
-                      Show more
-                    </a>
                   </div>
                 </CardBody>
               </Card>
@@ -131,25 +243,15 @@ class Profile extends React.Component {
               <Card className="bg-secondary shadow">
                 <CardHeader className="bg-white border-0">
                   <Row className="align-items-center">
-                    <Col xs="8">
+                    <Col xs="12">
                       <h3 className="mb-0">My account</h3>
-                    </Col>
-                    <Col className="text-right" xs="4">
-                      <Button
-                        color="primary"
-                        href="#pablo"
-                        onClick={e => e.preventDefault()}
-                        size="sm"
-                      >
-                        Settings
-                      </Button>
                     </Col>
                   </Row>
                 </CardHeader>
                 <CardBody>
                   <Form>
                     <h6 className="heading-small text-muted mb-4">
-                      User information
+                      Company information
                     </h6>
                     <div className="pl-lg-4">
                       <Row>
@@ -159,13 +261,15 @@ class Profile extends React.Component {
                               className="form-control-label"
                               htmlFor="input-username"
                             >
-                              Username
+                              Name
                             </label>
                             <Input
                               className="form-control-alternative"
-                              defaultValue="lucky.jesse"
+                              value={this.state.name}
+                              onChange={e => this.onChangeName(e.target.value)}
+                              readOnly={!this.state.editing}
                               id="input-username"
-                              placeholder="Username"
+                              placeholder="Name"
                               type="text"
                             />
                           </FormGroup>
@@ -181,143 +285,92 @@ class Profile extends React.Component {
                             <Input
                               className="form-control-alternative"
                               id="input-email"
-                              placeholder="jesse@example.com"
+                              readOnly={!this.state.editing}
+                              value={this.state.email}
+                              onChange={e => this.onChangeEmail(e.target.value)}
+                              placeholder="company@example.com"
                               type="email"
                             />
                           </FormGroup>
                         </Col>
                       </Row>
                       <Row>
-                        <Col lg="6">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-first-name"
-                            >
-                              First name
-                            </label>
+                        <Col lg="12">
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-password"
+                          >
+                            Password
+
+                              {
+                              this.state.editing ?
+                                <Button className="btn-icon btn-2 ml-2" size="sm" color="primary" type="button" onClick={this.changePassword}>
+                                  <span className="btn-inner--icon">
+                                    <i className="fas fa-pen"></i>
+                                  </span>
+                                </Button>
+                                : null
+                            }
+
+                          </label>
+                          <FormGroup className={this.state.classField1}>
                             <Input
-                              className="form-control-alternative"
-                              defaultValue="Lucky"
-                              id="input-first-name"
-                              placeholder="First name"
-                              type="text"
+                              className={this.state.classPwd1}
+                              value={this.state.password}
+                              readOnly={!this.state.changePassword}
+                              id="input-password"
+                              placeholder="Password"
+                              onChange={e => this.onChangePassword(e.target.value)}
+                              type="password"
                             />
+
                           </FormGroup>
-                        </Col>
-                        <Col lg="6">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-last-name"
-                            >
-                              Last name
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue="Jesse"
-                              id="input-last-name"
-                              placeholder="Last name"
-                              type="text"
-                            />
-                          </FormGroup>
+
                         </Col>
                       </Row>
+                      {
+
+                        this.state.changePassword ? <Row>
+                          <Col lg="12">
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-confirm-password"
+                            >
+                              Confirm new Password
+
+                            </label>
+                            <FormGroup className={this.state.classField2}>
+                              <Input
+                                className={this.state.classPwd2}
+                                id="input-confirm-password"
+                                placeholder="Password"
+                                type="password"
+                                onChange={e => this.verifyPassword(e.target.value)}
+                              />
+
+                            </FormGroup>
+
+                          </Col>
+                        </Row>
+                          : null
+
+                      }
+                      {
+                        this.state.editing ? <Row >
+                          <Col lg="8" />
+                          <Col lg="4" className="text-right">
+                            <Button
+                              color="primary"
+                              href="#"
+                              onClick={this.saveChanges}
+                            >
+                              Save Changes
+                          </Button>
+                          </Col>
+                        </Row> : null
+                      }
                     </div>
-                    <hr className="my-4" />
-                    {/* Address */}
-                    <h6 className="heading-small text-muted mb-4">
-                      Contact information
-                    </h6>
-                    <div className="pl-lg-4">
-                      <Row>
-                        <Col md="12">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-address"
-                            >
-                              Address
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
-                              id="input-address"
-                              placeholder="Home Address"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col lg="4">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-city"
-                            >
-                              City
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue="New York"
-                              id="input-city"
-                              placeholder="City"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="4">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-country"
-                            >
-                              Country
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue="United States"
-                              id="input-country"
-                              placeholder="Country"
-                              type="text"
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col lg="4">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-country"
-                            >
-                              Postal code
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              id="input-postal-code"
-                              placeholder="Postal code"
-                              type="number"
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                    </div>
-                    <hr className="my-4" />
-                    {/* Description */}
-                    <h6 className="heading-small text-muted mb-4">About me</h6>
-                    <div className="pl-lg-4">
-                      <FormGroup>
-                        <label>About Me</label>
-                        <Input
-                          className="form-control-alternative"
-                          placeholder="A few words about you ..."
-                          rows="4"
-                          defaultValue="A beautiful Dashboard for Bootstrap 4. It is Free and
-                          Open Source."
-                          type="textarea"
-                        />
-                      </FormGroup>
-                    </div>
+
                   </Form>
                 </CardBody>
               </Card>
