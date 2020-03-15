@@ -19,7 +19,7 @@ import React from "react";
 
 // reactstrap components
 import { Container, Row, Col } from "reactstrap";
-import CategoryCard from '../Category/CategoryCard';
+import JobCard from '../Category/JobCard';
 import api from '../../utils/API';
 
 class Header extends React.Component {
@@ -38,8 +38,10 @@ class Header extends React.Component {
   }
 
   renderCategories = (items) => {
+    let row = [];
+
     if (typeof items !== 'undefined') {
-      let row = [];
+
 
       // Outer loop to create parent
       let count = 0;
@@ -52,7 +54,7 @@ class Header extends React.Component {
             console.log(items[j]);
             children.push(
                 <Col lg="6" xl="3" key={`Card#${items[j].id}`}>
-                  <CategoryCard
+                  <JobCard
                       key={`Card#${items[j].id}`}
                       id={items[j].id}
                       name={items[j].name}
@@ -68,8 +70,10 @@ class Header extends React.Component {
         console.log("row", count);
         count++;
       }
-      return row
+
     }
+
+    return row
   };
 
   render() {
