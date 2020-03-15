@@ -17,42 +17,19 @@
 */
 import React from "react";
 // node.js library that concatenates classes (strings)
-import classnames from "classnames";
 // javascipt plugin for creating charts
 import Chart from "chart.js";
 // react plugin used to create charts
-import { Line, Bar } from "react-chartjs-2";
 import API from './../utils/API'
 import LocalStorageService from './../services/LocalStorageService'
 import {Session} from 'bc-react-session';
-// import LocalStorageService from './../services/LocalStorageService'
-// import API from './../utils/API'
-
 // reactstrap components
-import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  NavItem,
-  NavLink,
-  Nav,
-  Progress,
-  Table,
-  Container,
-  Row,
-  Col
-} from "reactstrap";
-
 // core components
-import {
-  chartOptions,
-  parseOptions,
-  chartExample1,
-  chartExample2
-} from "variables/charts.js";
+import {chartOptions, parseOptions} from "variables/charts.js";
 
 import Header from "components/Headers/Header.js";
+// import LocalStorageService from './../services/LocalStorageService'
+// import API from './../utils/API'
 
 
 class Index extends React.Component {
@@ -106,8 +83,9 @@ class Index extends React.Component {
 
     return (
       <>
+        {/*Here are the categories*/}
         <Header />
-        {/* Page content */}
+        {/* Page content
         <Container className="mt--7" fluid>
           <Row>
             <Col className="mb-5 mb-xl-0" xl="8">
@@ -152,7 +130,7 @@ class Index extends React.Component {
                   </Row>
                 </CardHeader>
                 <CardBody>
-                  {/* Chart */}
+                   Chart
                   <div className="chart">
                     <Line
                       data={chartExample1[this.state.chartExample1Data]}
@@ -176,7 +154,7 @@ class Index extends React.Component {
                   </Row>
                 </CardHeader>
                 <CardBody>
-                  {/* Chart */}
+                   Chart
                   <div className="chart">
                     <Bar
                       data={chartExample2.data}
@@ -375,7 +353,7 @@ class Index extends React.Component {
               </Card>
             </Col>
           </Row>
-        </Container>
+        </Container>*/}
       </>
     );
 
