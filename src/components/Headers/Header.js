@@ -32,7 +32,7 @@ class Header extends React.Component {
   }
 
   componentDidMount() {
-    api.get('/jobs/').then(res => {if (res.status === 200 && res.data.length > 0) {
+    api.get('jobs/').then(res => {if (res.status === 200 && res.data.length > 0) {
         this.setState({items: res.data});}
     }).catch(error => console.error(error));
   }
@@ -53,7 +53,7 @@ class Header extends React.Component {
           if (j < items.length) {
             console.log(items[j]);
             children.push(
-                <Col lg="6" xl="3" key={`Card#${items[j].id}`}>
+                <Col lg="6" xl="3" key={`Card#${items[j].id}`} className="mb-4">
                   <JobCard
                       key={`Card#${items[j].id}`}
                       id={items[j].id}
@@ -66,7 +66,7 @@ class Header extends React.Component {
         }
         //Create the parent and add the children
         row.push(<Row key={`CardRow#${count}`}>{children}</Row>);
-        row.push(<br/>);
+        //row.push(<br/>);
         console.log("row", count);
         count++;
       }

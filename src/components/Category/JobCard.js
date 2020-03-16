@@ -1,7 +1,7 @@
 import React from "react";
 
 import {Card, CardBody, CardTitle, Row} from "reactstrap";
-import Redirect from "react-router-dom/es/Redirect";
+import {Redirect} from "react-router-dom";
 
 class JobCard extends React.Component {
     constructor(props) {
@@ -33,12 +33,17 @@ class JobCard extends React.Component {
         // THIS COULD BE HELPFUL @C3RBERUSS
         // https://tylermcginnis.com/react-router-url-parameters/
         if (redirect){
-            return (<Redirect to={`results/${id}`} />)
+            return <Redirect push to={{
+                pathname: '/admin/results',
+                params: {
+                    url: "?job="+name
+                }
+            }} />
         }
 
         return(
-            <Card className="card-stats mb-4 mb-xl-0" onClick={(e) => this.openCategory(e, id)}>
-                <CardBody key={id}>
+            <Card key={id} className="card-stats mb-4 mb-xl-0" onClick={(e) => this.openCategory(e, id)}>
+                <CardBody>
                     <Row>
                         <div className="col">
                             <CardTitle

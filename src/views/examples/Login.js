@@ -18,14 +18,12 @@
 import React from "react";
 import API from './../../utils/API'
 import LocalStorageService from './../../services/LocalStorageService'
-import { Redirect } from 'react-router'
-import {Session} from 'bc-react-session';
+import { Session } from 'bc-react-session';
 
 // reactstrap components
 import {
   Button,
   Card,
-  //CardHeader,
   CardBody,
   FormGroup,
   Form,
@@ -33,7 +31,6 @@ import {
   InputGroupAddon,
   InputGroupText,
   InputGroup,
-  // Row,
   Col
 } from "reactstrap";
 
@@ -66,25 +63,31 @@ class Login extends React.Component {
 
   signin = async () => {
 
-    let response = await API.post('auth/', {
+    try {
+      let response = await API.post('auth/', {
 
-      email: this.state.email,
-      password: this.state.password
-
-    });
-
-    if (response.status === 200) {
-
-      Session.start({ 
-        payload: response.data.company,
-        expiration: 10800000 // (optional) defaults to 1 day
+        email: this.state.email,
+        password: this.state.password
+  
       });
+  
+      if (response.status === 200) {
+  
+        Session.start({
+          payload: response.data.company,
+          expiration: 10800000 // (optional) defaults to 1 day
+        });
+  
+        LocalStorageService.setToken(response.data);
+  
+        this.setState({
+          redirect: true
+        });
+      }
+    } catch (error) {
+      
+      console.log(error);
 
-      LocalStorageService.setToken(response.data);
-
-      this.setState({
-        redirect: true
-      });
     }
 
   }
@@ -93,51 +96,51 @@ class Login extends React.Component {
 
     const session = Session.get();
 
-    if (session.isValid || session.autenticated) {
-      return <Redirect to='/admin/index' />
-    } else {
-
-      return (
-        <Col lg="5" md="7">
-          <Card className="bg-secondary shadow border-0">
-            <CardBody className="px-lg-5 py-lg-5">
-              <div className="text-center text-muted mb-4">
-                <small>Sign In</small>
-              </div>
-              <Form role="form">
-                <FormGroup className="mb-3">
-                  <InputGroup className="input-group-alternative">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>
-                        <i className="ni ni-email-83" />
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <Input placeholder="Email" type="email" autoComplete="new-email" onChange={this.handleChangeEmail} />
-                  </InputGroup>
-                </FormGroup>
-                <FormGroup>
-                  <InputGroup className="input-group-alternative">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>
-                        <i className="ni ni-lock-circle-open" />
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <Input placeholder="Password" type="password" autoComplete="new-password" onChange={this.handleChangePassword} />
-                  </InputGroup>
-                </FormGroup>
-
-                <div className="text-center">
-                  <Button className="my-4" color="primary" type="button" onClick={this.signin}>
-                    Sign in
-                  </Button>
-                </div>
-              </Form>
-            </CardBody>
-          </Card>
-
-        </Col>
-      );
+    if (session.isValid || session.autenticated || this.state.redirect) {
+      // return <Redirect from="auth/login" to='/admin/index' />
+      this.props.history.push("/admin/index");
     }
+
+    return (
+      <Col lg="5" md="7">
+        <Card className="bg-secondary shadow border-0">
+          <CardBody className="px-lg-5 py-lg-5">
+            <div className="text-center text-muted mb-4">
+              <small>Sign In</small>
+            </div>
+            <Form role="form">
+              <FormGroup className="mb-3">
+                <InputGroup className="input-group-alternative">
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText>
+                      <i className="ni ni-email-83" />
+                    </InputGroupText>
+                  </InputGroupAddon>
+                  <Input placeholder="Email" type="email" autoComplete="new-email" onChange={this.handleChangeEmail} />
+                </InputGroup>
+              </FormGroup>
+              <FormGroup>
+                <InputGroup className="input-group-alternative">
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText>
+                      <i className="ni ni-lock-circle-open" />
+                    </InputGroupText>
+                  </InputGroupAddon>
+                  <Input placeholder="Password" type="password" autoComplete="new-password" onChange={this.handleChangePassword} />
+                </InputGroup>
+              </FormGroup>
+
+              <div className="text-center">
+                <Button className="my-4" color="primary" type="button" onClick={this.signin}>
+                  Sign in
+                  </Button>
+              </div>
+            </Form>
+          </CardBody>
+        </Card>
+
+      </Col>
+    );
   }
 }
 

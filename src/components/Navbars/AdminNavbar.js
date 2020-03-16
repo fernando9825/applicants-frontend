@@ -33,8 +33,6 @@ import {
   Media
 } from "reactstrap";
 
-import { Redirect } from 'react-router'
-
 class AdminNavbar extends React.Component {
 
   constructor(props) {
@@ -70,7 +68,8 @@ class AdminNavbar extends React.Component {
     const session = Session.get();
 
     if (session.expired || !session.isValid) {
-      return <Redirect to="/auth/login" />
+      //return <Redirect to="/auth/login" />
+      this.props.history.push("/auth/login");
     }
 
     const { payload } = Session.get();
