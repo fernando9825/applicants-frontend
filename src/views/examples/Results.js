@@ -1,20 +1,4 @@
-/*!
 
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 
 // reactstrap components
@@ -26,6 +10,8 @@ import {
   Row,
   Modal,
   Button,
+  FormGroup,
+  Input,
   Col,
 } from "reactstrap";
 // core components
@@ -42,8 +28,16 @@ class Results extends React.Component {
       results: [],
       redirect: false,
       exampleModal: false,
+      notificationModal: false,
       modalData: {}
     };
+  }
+
+
+  showNotification = async (state) => {
+    this.setState({
+      [state]: !this.state[state]
+    });
   }
 
   toggleModal = async (state, id) => {
@@ -60,6 +54,7 @@ class Results extends React.Component {
           });
         }
       } catch (error) {
+        this.showNotification("notificationModal");
         console.log(error);
       }
 
@@ -68,7 +63,7 @@ class Results extends React.Component {
         exampleModal: false
       });
     }
-  };
+  }
 
   fetchResults() {
 
@@ -172,6 +167,7 @@ class Results extends React.Component {
           <Modal
             className="modal-dialog-centered"
             isOpen={this.state.exampleModal}
+            size="lg"
             toggle={() => this.toggleModal("exampleModal", 1)}
           >
             <div className="modal-header">
@@ -191,7 +187,207 @@ class Results extends React.Component {
             <div className="modal-body">
               <Row>
                 <Col lg="12">
-                  <p>{JSON.stringify(this.state.modalData)}</p>
+                  <FormGroup>
+                    <label
+                      className="form-control-label"
+                      htmlFor="name"
+                    >
+                      Name
+                            </label>
+                    <Input
+                      className="form-control-alternative"
+                      id="name"
+                      readOnly
+                      value={this.state.modalData.partner_name}
+                      type="text"
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col lg="6">
+                  <FormGroup>
+                    <label
+                      className="form-control-label"
+                      htmlFor="degree"
+                    >
+                      Degree
+                    </label>
+                    <Input
+                      className="form-control-alternative"
+                      id="degree"
+                      readOnly
+                      value={this.state.modalData.type}
+                      type="text"
+                    />
+                  </FormGroup>
+                </Col>
+                <Col lg="6">
+                  <FormGroup>
+                    <label
+                      className="form-control-label"
+                      htmlFor="subject"
+                    >
+                      Subject
+                            </label>
+                    <Input
+                      className="form-control-alternative"
+                      id="subject"
+                      readOnly
+                      value={this.state.modalData.name}
+                      type="text"
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col lg="6">
+                  <FormGroup>
+                    <label
+                      className="form-control-label"
+                      htmlFor="job"
+                    >
+                      Applied Job
+                    </label>
+                    <Input
+                      className="form-control-alternative"
+                      id="job"
+                      readOnly
+                      value={this.state.modalData.job}
+                      type="text"
+                    />
+                  </FormGroup>
+                </Col>
+                <Col lg="6">
+                  <FormGroup>
+                    <label
+                      className="form-control-label"
+                      htmlFor="department"
+                    >
+                      Department
+                    </label>
+                    <Input
+                      className="form-control-alternative"
+                      id="department"
+                      readOnly
+                      value={this.state.modalData.department}
+                      type="text"
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+              <Row>
+                <Col lg="6">
+                  <FormGroup>
+                    <label
+                      className="form-control-label"
+                      htmlFor="input-email"
+                    >
+                      Email
+                            </label>
+                    <Input
+                      className="form-control-alternative"
+                      id="name"
+                      readOnly
+                      value={this.state.modalData.email_from ? this.state.modalData.email_from : ""}
+                      type="email"
+                    />
+                  </FormGroup>
+                </Col>
+                <Col lg="6">
+                  <FormGroup>
+                    <label
+                      className="form-control-label"
+                      htmlFor="salary"
+                    >
+                      Salary Expected
+                            </label>
+                    <Input
+                      className="form-control-alternative"
+                      id="salary"
+                      readOnly
+                      value={this.state.modalData.salary_expected ? "$" + this.state.modalData.salary_expected : "$0.0"}
+                      type="text"
+                    />
+                  </FormGroup>
+                </Col>
+
+              </Row>
+              <Row>
+                <Col lg="4">
+                  <FormGroup>
+                    <label
+                      className="form-control-label"
+                      htmlFor="phone"
+                    >
+                      Phone
+                            </label>
+                    <Input
+                      className="form-control-alternative"
+                      id="phone"
+                      readOnly
+                      value={this.state.modalData.partner_phone}
+                      type="phone"
+                    />
+                  </FormGroup>
+                </Col>
+                <Col lg="4">
+                  <FormGroup>
+                    <label
+                      className="form-control-label"
+                      htmlFor="mobile"
+                    >
+                      Mobile
+                            </label>
+                    <Input
+                      className="form-control-alternative"
+                      id="mobile"
+                      readOnly
+                      value={this.state.modalData.partner_mobile}
+                      type="phone"
+                    />
+                  </FormGroup>
+                </Col>
+                <Col lg="4">
+                  <FormGroup>
+                    <label
+                      className="form-control-label"
+                      htmlFor="priority"
+                    >
+                      Priority
+                            </label>
+                    <Input
+                      className="form-control-alternative"
+                      id="priority"
+                      readOnly
+                      value={this.state.modalData.priority}
+                      type="number"
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+
+              <Row>
+
+              </Row>
+
+              <Row>
+                <Col lg="12">
+                  <FormGroup>
+                    <label
+                      className="form-control-label"
+                      htmlFor="description"
+                    >
+                      Description
+                            </label>
+                    <Input
+                      className="form-control-alternative"
+                      id="description"
+                      readOnly
+                      value={this.state.modalData.description}
+                      type="textarea"
+                    />
+                  </FormGroup>
                 </Col>
               </Row>
             </div>
@@ -200,15 +396,55 @@ class Results extends React.Component {
                 color="secondary"
                 data-dismiss="modal"
                 type="button"
-                onClick={() => this.toggleModal("exampleModal")}
+                onClick={() => this.toggleModal("exampleModal", 1)}
               >
                 Close
-            </Button>
-              <Button color="primary" type="button">
-                Save changes
-            </Button>
+              </Button>
             </div>
           </Modal>
+
+          <Modal
+            className="modal-dialog-centered modal-warning"
+            contentClassName="bg-gradient-warning"
+            isOpen={this.state.notificationModal}
+            toggle={() => this.showNotification("notificationModal")}
+          >
+            <div className="modal-header">
+              <h6 className="modal-title" id="modal-title-notification">
+                Limit Exceeded
+                </h6>
+              <button
+                aria-label="Close"
+                className="close"
+                data-dismiss="modal"
+                type="button"
+                onClick={() => this.showNotification("notificationModal")}
+              >
+                <span aria-hidden={true}>×</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="py-3 text-center">
+                <i className="ni ni-bell-55 ni-3x" />
+                <h4 className="heading mt-4">You should read this!</h4>
+                <p>
+                  You have been Limit Exceeded of your plan!
+                </p>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <Button
+                className="text-white ml-auto"
+                color="link"
+                data-dismiss="modal"
+                type="button"
+                onClick={() => this.showNotification("notificationModal")}
+              >
+                Close
+                </Button>
+            </div>
+          </Modal>
+
         </Container>
       </>
     );
