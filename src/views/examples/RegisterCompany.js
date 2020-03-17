@@ -10,8 +10,6 @@ class RegisterCompany extends React.Component {
     constructor(props) {
         super(props);
 
-        let { payload } = Session.get();
-
         this.state = {
             editing: true,
             changePassword: false,
@@ -124,8 +122,7 @@ class RegisterCompany extends React.Component {
         return (
             <>
                 <UserHeader
-                    info="This is your company register page. from here you can add companies/users who are
-                    going to be able to see your applicants in the system."
+                    info="This is your profile page. You can edit your info, watch you view counts and plan's limit."
                 />
 
                 {/*    Container*/}

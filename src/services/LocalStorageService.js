@@ -29,7 +29,7 @@ const LocalStorageService = (function () {
         let values = _getCompany();
 
         if (typeof values != "undefined"){
-            return (values.id === 1);// if id equals 1, its the admin
+            return (values.is_superuser);// if id equals 1, its the admin
         }
 
         return false;
