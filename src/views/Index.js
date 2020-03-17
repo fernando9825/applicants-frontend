@@ -1,77 +1,63 @@
-/*!
 
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 // node.js library that concatenates classes (strings)
-import classnames from "classnames";
-// javascipt plugin for creating charts
-import Chart from "chart.js";
-// react plugin used to create charts
-import { Line, Bar } from "react-chartjs-2";
+import API from './../utils/API'
+import LocalStorageService from './../services/LocalStorageService'
+import { Session } from 'bc-react-session';
 // reactstrap components
-import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  NavItem,
-  NavLink,
-  Nav,
-  Progress,
-  Table,
-  Container,
-  Row,
-  Col
-} from "reactstrap";
-
 // core components
-import {
-  chartOptions,
-  parseOptions,
-  chartExample1,
-  chartExample2
-} from "variables/charts.js";
-
 import Header from "components/Headers/Header.js";
 
+
+
 class Index extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       activeNav: 1,
-      chartExample1Data: "data1"
+      authenticated: false,
+      loading: true
     };
-    if (window.Chart) {
-      parseOptions(Chart, chartOptions());
+  }
+
+  async componentDidMount() {
+
+
+    if (Session.get().isValid) {
+      Session.onExpiration((session) => Session.destroy());
+    }
+
+    try {
+      let response = await API.post('verify/', {
+        token: LocalStorageService.getAccessToken()
+      });
+
+      if (response.status === 200) {
+        Session.setPayload(response.data.company);
+        this.setState({})
+      }
+      console.log(response);
+
+    } catch (error) {
+      console.log(error);
+      LocalStorageService.clearToken();
+      Session.destroy();
     }
   }
+
   toggleNavs = (e, index) => {
     e.preventDefault();
     this.setState({
       activeNav: index,
-      chartExample1Data:
-        this.state.chartExample1Data === "data1" ? "data2" : "data1"
     });
   };
   render() {
+
     return (
       <>
+        {/*Here are the categories*/}
         <Header />
-        {/* Page content */}
+        {/* Page content
         <Container className="mt--7" fluid>
           <Row>
             <Col className="mb-5 mb-xl-0" xl="8">
@@ -116,7 +102,7 @@ class Index extends React.Component {
                   </Row>
                 </CardHeader>
                 <CardBody>
-                  {/* Chart */}
+                   Chart
                   <div className="chart">
                     <Line
                       data={chartExample1[this.state.chartExample1Data]}
@@ -140,7 +126,7 @@ class Index extends React.Component {
                   </Row>
                 </CardHeader>
                 <CardBody>
-                  {/* Chart */}
+                   Chart
                   <div className="chart">
                     <Bar
                       data={chartExample2.data}
@@ -339,9 +325,15 @@ class Index extends React.Component {
               </Card>
             </Col>
           </Row>
-        </Container>
+        </Container>*/}
       </>
     );
+
+    // if (this.state.authenticated === true) {
+
+    // } else {
+    //   return <Redirect to="/auth/login" />
+    // }
   }
 }
 
