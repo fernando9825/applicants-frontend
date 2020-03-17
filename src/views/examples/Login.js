@@ -90,6 +90,7 @@ class Login extends React.Component {
         <Card className="bg-secondary shadow border-0">
           <CardBody className="px-lg-5 py-lg-5">
             <div className="text-center text-muted mb-4">
+            <img src="https://media-exp1.licdn.com/dms/image/C510BAQFDlVm-_CPaPQ/company-logo_200_200/0?e=2159024400&v=beta&t=4rRPVqNLeCyxnOlwChkj8nacK2OWfjUdbo_GvsmxNdU" alt="ProntoBPO" width="100px" height="100px"></img><br></br>
               <small>Sign In</small>
             </div>
             <Form role="form">

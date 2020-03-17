@@ -16,8 +16,8 @@
 
 */
 :root {
-  --blue: #5e72e4;
-  --indigo: #5603ad;
+  --blue: #487eb0;
+  --indigo: #487eb0;
   --purple: #8965e0;
   --pink: #f3a4b5;
   --red: #f5365c;
@@ -31,7 +31,7 @@
   --gray-dark: #32325d;
   --light: #ced4da;
   --lighter: #e9ecef;
-  --primary: #5e72e4;
+  --primary: #487eb0;
   --secondary: #f7fafc;
   --success: #2dce89;
   --info: #11cdef;
@@ -39,9 +39,9 @@
   --danger: #f5365c;
   --light: #adb5bd;
   --dark: #212529;
-  --default: #172b4d;
-  --white: #fff;
-  --neutral: #fff;
+  --default: #2f3640;
+  --white: #f5f6fa ;
+  --neutral: #f5f6fa ;
   --darker: black;
   --breakpoint-xs: 0;
   --breakpoint-sm: 576px;
@@ -49,7 +49,7 @@
   --breakpoint-lg: 992px;
   --breakpoint-xl: 1200px;
   --font-family-sans-serif: Open Sans, sans-serif;
-  --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+  --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Arial", "Courier New", monospace; }
 
 *,
 *::before,
@@ -76,7 +76,7 @@ body {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #525f7f;
+  color: #487eb0;
   text-align: left;
   background-color: #f8f9fe; }
 
