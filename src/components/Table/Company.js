@@ -1,22 +1,9 @@
 import React from "react";
 import {
-    Badge,
-    Button,
-    Card,
-    CardHeader,
-    Col,
-    Container, DropdownItem, DropdownMenu, DropdownToggle,
-    FormGroup,
-    Input,
     Media,
-    Modal,
-    Progress,
-    Row,
-    Table, UncontrolledDropdown
 } from "reactstrap";
-import Applicant from "../Applicant/Applicant";
 
-class Company extends React.Component{
+class Company extends React.Component {
 
     constructor(props) {
         super(props);
@@ -36,80 +23,80 @@ class Company extends React.Component{
         const { id, name, email, planName, planLimit, currentViews } = this.state;
 
         return (
-                <>
+            <>
 
-                                        <tr key={id}>
-                                            <th scope="row">
-                                                <Media className="align-items-center">
-                                                    <a
-                                                        className="avatar rounded-circle mr-3"
-                                                        href="#pablo"
-                                                        onClick={e => e.preventDefault()}
-                                                    >
-                                                        <img
-                                                            alt="..."
-                                                            src={require("assets/img/theme/user.png")}
-                                                        />
-                                                    </a>
-                                                    <Media>
-                            <span className="mb-0 text-sm">
-                                {name}
-                            </span>
-                                                    </Media>
-                                                </Media>
-                                            </th>
-                                            <td>
+                <tr key={id}>
+                    <th scope="row">
+                        <Media className="align-items-center">
+                            <a
+                                className="avatar rounded-circle mr-3"
+                                href="#pablo"
+                                onClick={e => e.preventDefault()}
+                            >
+                                <img
+                                    alt="..."
+                                    src={require("assets/img/theme/user.png")}
+                                />
+                            </a>
+                            <Media>
+                                <span className="mb-0 text-sm">
+                                    {name}
+                                </span>
+                            </Media>
+                        </Media>
+                    </th>
+                    <td>
 
-                                                <div className="progress-wrapper">
-                                                    <div className="progress-info">
-                                                        <div className="progress-percentage">
-                                                            <span>{email}</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                        <div className="progress-wrapper">
+                            <div className="progress-info">
+                                <div className="progress-percentage">
+                                    <span>{email}</span>
+                                </div>
+                            </div>
+                        </div>
 
-                                            </td>
+                    </td>
 
-                                            <td>
+                    <td>
 
-                                                <div className="progress-wrapper">
-                                                    <div className="progress-info">
-                                                        <div className="progress-percentage">
-                                                            <span>{planName}</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                        <div className="progress-wrapper">
+                            <div className="progress-info">
+                                <div className="progress-percentage">
+                                    <span>{planName}</span>
+                                </div>
+                            </div>
+                        </div>
 
-                                            </td>
+                    </td>
 
-                                            <td>
+                    <td>
 
-                                                <div className="progress-wrapper">
-                                                    <div className="progress-info">
-                                                        <div className="progress-percentage">
-                                                            <span>{currentViews}</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                        <div className="progress-wrapper">
+                            <div className="progress-info">
+                                <div className="progress-percentage">
+                                    <span>{currentViews}</span>
+                                </div>
+                            </div>
+                        </div>
 
-                                            </td>
+                    </td>
 
-                                            <td>
+                    <td>
 
-                                                <div className="progress-wrapper">
-                                                    <div className="progress-info">
-                                                        <div className="progress-percentage">
-                                                            <span>{planLimit}</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                        <div className="progress-wrapper">
+                            <div className="progress-info">
+                                <div className="progress-percentage">
+                                    <span>{planLimit}</span>
+                                </div>
+                            </div>
+                        </div>
 
-                                            </td>
-                                        </tr>
+                    </td>
+                </tr>
 
 
-                </>
-            );
+            </>
+        );
 
     }
 

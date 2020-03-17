@@ -1,9 +1,8 @@
 import React from "react";
 import UserHeader from "../../components/Headers/UserHeader";
-import {Button, Card, CardBody, CardHeader, Col, Container, Form, FormGroup, Input, Row} from "reactstrap";
-import {Session} from "bc-react-session";
+import { Button, Card, CardBody, CardHeader, Col, Container, Form, FormGroup, Input, Row } from "reactstrap";
 import api from "../../utils/API";
-import {CopyToClipboard} from "react-copy-to-clipboard/lib/Component";
+import { CopyToClipboard } from "react-copy-to-clipboard/lib/Component";
 import generator from 'generate-password';
 
 class RegisterCompany extends React.Component {
@@ -30,12 +29,12 @@ class RegisterCompany extends React.Component {
         this.email = React.createRef();
     }
 
-    getPlans = (plans) =>{
-        if (typeof plans == 'object'){
+    getPlans = (plans) => {
+        if (typeof plans == 'object') {
 
             let row = [];
 
-            for(let i=0; i<plans.length; i++){
+            for (let i = 0; i < plans.length; i++) {
                 row.push(<option >{plans[i].name}</option>);
             }
 
@@ -44,7 +43,7 @@ class RegisterCompany extends React.Component {
     };
 
     copy = (text) => {
-        return(<CopyToClipboard
+        return (<CopyToClipboard
             text={text}
             onCopy={() => this.setState({ copiedText: text })}
         >
@@ -76,14 +75,14 @@ class RegisterCompany extends React.Component {
         console.log("Password: ", password);
         console.log("REf select", this.state.selectedPlan);
 
-        console.log("name:",  nameInput.value);
+        console.log("name:", nameInput.value);
         console.log("email: ", emailInput.value);
 
         let name = nameInput.value;
         let email = emailInput.value;
         let planId = this.state.plan.find((plan) => plan.name === this.state.selectedPlan).id;
 
-        if (name.length > 2 && email.length > 5){
+        if (name.length > 2 && email.length > 5) {
             api.post("companies/", {
                 name: name,
                 email: email,
@@ -110,8 +109,10 @@ class RegisterCompany extends React.Component {
 
     componentDidMount() {
 
-        api.get('plans/').then(res => {if (res.status === 200 && res.data.length > 0) {
-            this.setState({plan: res.data});}
+        api.get('plans/').then(res => {
+            if (res.status === 200 && res.data.length > 0) {
+                this.setState({ plan: res.data });
+            }
             //console.log(res.data);
         }).catch(error => console.error(error));
     }
@@ -122,9 +123,8 @@ class RegisterCompany extends React.Component {
 
     render() {
 
-        const { payload } = Session.get();
 
-        let {plan, clipBoardText} = this.state;
+        let { plan, clipBoardText } = this.state;
         return (
             <>
                 <UserHeader
@@ -169,21 +169,21 @@ class RegisterCompany extends React.Component {
                                                 </Col>
                                                 <Col lg="6">
 
-                                                        <label
-                                                            className="form-control-label"
-                                                            htmlFor="input-email"
-                                                        >
-                                                            Email address
+                                                    <label
+                                                        className="form-control-label"
+                                                        htmlFor="input-email"
+                                                    >
+                                                        Email address
                                                         </label>
-                                                        <Input
-                                                            className="form-control-alternative"
-                                                            id="input-email"
-                                                            //onChange={e => this.onChangeEmail(e.target.value)}
-                                                            placeholder="company@example.com"
-                                                            type="email"
-                                                            required
-                                                            ref = { this.email }
-                                                        />
+                                                    <Input
+                                                        className="form-control-alternative"
+                                                        id="input-email"
+                                                        //onChange={e => this.onChangeEmail(e.target.value)}
+                                                        placeholder="company@example.com"
+                                                        type="email"
+                                                        required
+                                                        ref={this.email}
+                                                    />
 
                                                 </Col>
 
@@ -197,18 +197,20 @@ class RegisterCompany extends React.Component {
                                                     <FormGroup>
                                                         <label htmlFor="plan">Plan</label>
                                                         <Input id="plan" type="select"
-                                                               onChange={e => this.onPlanChange(e.target.value)}
-                                                               onClick={e => this.onPlanChange(e.target.value)}
+                                                            onChange={e => this.onPlanChange(e.target.value)}
+                                                            onClick={e => this.onPlanChange(e.target.value)}
                                                         >
                                                             {this.getPlans(plan)}
                                                         </Input>
                                                     </FormGroup>
 
                                                 </Col>
-                                                <Button color="primary" type="button" onClick={() => {this.saveCompany()}}>Save company</Button>
+                                                <Button color="primary" type="button" onClick={() => { this.saveCompany() }}>Save company</Button>
                                             </Row>
                                             <Row>
-                                                {this.state.copyToClipBoard ? this.copy(clipBoardText) : null}
+                                                <Col lg="12" className="text-right">
+                                                    {this.state.copyToClipBoard ? this.copy(clipBoardText) : null}
+                                                </Col>
                                             </Row>
                                         </div>
 

@@ -2,8 +2,7 @@ import React from "react";
 import HeaderBase from "../../components/Headers/HeaderBase";
 import Company from "../../components/Table/Company";
 import api from "../../utils/API";
-import {Card, CardHeader, Col, Container, Row, Table} from "reactstrap";
-import JobCard from "../../components/Category/JobCard";
+import {Card, CardHeader,Container, Row, Table} from "reactstrap";
 
 class CompanyList extends React.Component {
 
@@ -24,7 +23,6 @@ class CompanyList extends React.Component {
     }
 
     renderCompanies = (items) => {
-        let row = [];
 
         console.log(JSON.stringify(items));
         if (typeof items !== 'undefined') {
