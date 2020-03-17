@@ -21,10 +21,11 @@ class RegisterCompany extends React.Component {
             classField2: "",
             plan: [],
             copyToClipBoard: false,
-            clipBoardText: undefined
+            clipBoardText: undefined,
+            selectedPlan: undefined
         };
 
-        this.selectedPlan = React.createRef();
+
         this.name = React.createRef();
         this.email = React.createRef();
     }
@@ -73,14 +74,14 @@ class RegisterCompany extends React.Component {
         let nameInput = document.getElementById("input-username");
         let emailInput = document.getElementById("input-email");
         console.log("Password: ", password);
-        console.log("REf select", this.selectedPlan.current.value)
+        console.log("REf select", this.state.selectedPlan);
 
         console.log("name:",  nameInput.value);
         console.log("email: ", emailInput.value);
 
         let name = nameInput.value;
         let email = emailInput.value;
-        let planId = this.state.plan.find((plan) => plan.name === this.selectedPlan.current.value).id;
+        let planId = this.state.plan.find((plan) => plan.name === this.state.selectedPlan).id;
 
         if (name.length > 2 && email.length > 5){
             api.post("companies/", {
@@ -100,6 +101,11 @@ class RegisterCompany extends React.Component {
         }
 
 
+    };
+
+    onPlanChange = (value) => {
+        console.log(value);
+        this.setState({ selectedPlan: value });
     };
 
     componentDidMount() {
@@ -184,23 +190,20 @@ class RegisterCompany extends React.Component {
 
                                             </Row>
                                             <Row>
-                                                <Col lg="1">
+                                                <Col lg="12">
 
-                                                <label
-                                                    className="form-control-label"
-                                                    htmlFor="input-plan"
-                                                >
-                                                    Select plan
-                                                </label>
 
-                                                <select
-                                                    name="input-plan"
-                                                    className="form-control-alternative"
-                                                    id="selected-plan"
-                                                    ref = { this.selectedPlan }
-                                                >
-                                                    {this.getPlans(plan)}
-                                                </select>
+
+                                                    <FormGroup>
+                                                        <label htmlFor="plan">Plan</label>
+                                                        <Input id="plan" type="select"
+                                                               onChange={e => this.onPlanChange(e.target.value)}
+                                                               onClick={e => this.onPlanChange(e.target.value)}
+                                                        >
+                                                            {this.getPlans(plan)}
+                                                        </Input>
+                                                    </FormGroup>
+
                                                 </Col>
                                                 <Button color="primary" type="button" onClick={() => {this.saveCompany()}}>Save company</Button>
                                             </Row>
