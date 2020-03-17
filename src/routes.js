@@ -4,6 +4,7 @@ import Profile from "views/examples/Profile.js";
 import Login from "views/examples/Login.js";
 import Browser from "./views/examples/Browser"
 import Results from "./views/examples/Results";
+import RegisterCompany from  "./views/examples/RegisterCompany";
 
 var routes = [
   {
@@ -46,5 +47,15 @@ var routes = [
     layout: "/admin",
     show: false
   },
+  {
+    path: "/register-company",
+    name: "Register company",
+    icon: "ni ni-single-02 text-blue",
+    component: RegisterCompany,
+    layout: "/admin",
+    show: false,
+    admin: true
+  },
+
 ];
 export default routes;

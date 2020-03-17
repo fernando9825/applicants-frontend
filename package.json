@@ -48,6 +48,7 @@
     "bc-react-session": "^1.5.2",
     "chart.js": "2.9.3",
     "classnames": "2.2.6",
+    "generate-password": "^1.5.1",
     "moment": "2.24.0",
     "node-sass": "4.13.1",
     "nouislider": "14.1.1",

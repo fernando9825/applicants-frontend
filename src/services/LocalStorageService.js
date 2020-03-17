@@ -9,7 +9,7 @@ const LocalStorageService = (function () {
     
     function _setToken(tokenObj) {
         localStorage.setItem('access_token', tokenObj.token);
-        localStorage.setItem('usr', tokenObj.company);
+        localStorage.setItem('usr', JSON.stringify({company: tokenObj.company}));
     } 
     
     function _getAccessToken() {
@@ -20,13 +20,28 @@ const LocalStorageService = (function () {
         localStorage.removeItem('access_token');
         localStorage.removeItem('usr');
     }
+
+    function _getCompany() {
+        return JSON.parse(localStorage.getItem('usr')).company;
+    }
+
+    function _isAdmin() {
+        let values = _getCompany();
+
+        if (typeof values != "undefined"){
+            return (values.id === 1);// if id equals 1, its the admin
+        }
+
+        return false;
+    }
     
     
     return {
         getService: _getService,
         setToken: _setToken,
         getAccessToken: _getAccessToken,
-        clearToken: _clearToken
+        clearToken: _clearToken,
+        isAdmin: _isAdmin
     }
 })(); 
 

@@ -174,7 +174,12 @@ class Profile extends React.Component {
 
     return (
       <>
-        <UserHeader handler={this.editProfile.bind(this)} textButton={this.state.editButton} />
+        <UserHeader
+            handler={this.editProfile.bind(this)}
+            textButton={this.state.editButton}
+            info="This is your profile page. You can see the progress you've
+                  made with your work and manage your projects or assigned tasks"
+        />
         {/* Page content */}
         <Container className="mt--7" fluid>
           <Row>

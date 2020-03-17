@@ -4,6 +4,7 @@ import React from "react";
 import { NavLink as NavLinkRRD, Link } from "react-router-dom";
 // nodejs library to set properties for components
 import { PropTypes } from "prop-types";
+import localStorage from "../../services/LocalStorageService";
 
 // reactstrap components
 import {
@@ -65,7 +66,7 @@ class Sidebar extends React.Component {
   // creates the links that appear in the left menu / Sidebar
   createLinks = routes => {
     return routes.map((prop, key) => {
-      if(prop.show ){
+      if(prop.show || prop.admin === localStorage.isAdmin()){
         return (
           <NavItem key={key}>
             <NavLink
